@@ -3,13 +3,14 @@ import { RouterOutlet } from '@angular/router';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { Menu } from './menu/menu';
-import { Home } from "./home/home";
+import { Home } from './home/home';
+import { Toast } from './common/toast/toast';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,NgbAlert, CommonModule, Menu, Home],
+  imports: [RouterOutlet, NgbAlert, CommonModule, Menu, Home, Toast],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
 })
 export class App {
   protected title = 'workshops-app';
@@ -20,7 +21,7 @@ export class App {
     this.count++;
   }
 
-  toggle(){
+  toggle() {
     // alert('closed');
     this.isOpen = false;
   }

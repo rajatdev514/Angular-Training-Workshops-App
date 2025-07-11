@@ -90,7 +90,7 @@ export class WorkshopsList implements OnInit {
   }
 
   filterByCategory(category: string) {
-    this.workshopsService.getWorkshops(this.page, category).subscribe({
+    this.workshopsService.getWorkshops(this.page).subscribe({
       next: (workshops) => {
         this.workshops = workshops;
         // A better alternative: If you make `this.workshops` and `this.filterKey` as signals, you can compute `this.filteredWorkshops` automatically when either `this.workshops` changes or `this.filterKey` changes

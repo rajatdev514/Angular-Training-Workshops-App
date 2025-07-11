@@ -1,6 +1,23 @@
 // :host targets the <app-item></app-item> element that "hosts" the HTML for this component
 :host {
     display: flex;
+    position: relative;
+}
+
+.card-action-buttons {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 16px;
+
+    .btn-action-button {
+        cursor: pointer;
+        opacity: 0.7;
+        
+        &:hover {
+            opacity: 1;
+        }
+    }
 }
 
 .card-img-top-wrapper {
