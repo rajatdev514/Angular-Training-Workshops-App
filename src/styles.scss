@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+h2.highlight {
+  color: #2c3e50;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
