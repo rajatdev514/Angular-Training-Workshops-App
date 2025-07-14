@@ -8,6 +8,7 @@ import { LoadingSpinner } from '../../common/loading-spinner/loading-spinner';
 import { ErrorAlert } from '../../common/error-alert/error-alert';
 import { Item } from './item/item';
 import { Pagination } from '../../common/pagination/pagination';
+import { ToastService } from '../../common/toast';
 
 @Component({
   selector: 'app-workshops-list',
@@ -34,7 +35,8 @@ export class WorkshopsList implements OnInit {
   constructor(
     private workshopsService: WorkshopsService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private toastService: ToastService
   ) {
     this.workshopsService.doSomething();
   }
@@ -95,6 +97,30 @@ export class WorkshopsList implements OnInit {
         this.workshops = workshops;
         // A better alternative: If you make `this.workshops` and `this.filterKey` as signals, you can compute `this.filteredWorkshops` automatically when either `this.workshops` changes or `this.filterKey` changes
         this.filterWorkshops();
+      },
+    });
+  }
+
+  deleteWorkshop(workshop: IWorkshop) {
+    console.log(workshop);
+
+    this.workshopsService.deleteWorkshopById(workshop.id).subscribe({
+      next: () => {
+        this.toastService.add({
+          message: `Deleted workshop with id = ${workshop.id}`,
+          className: 'bg-success text-light',
+          duration: 5000,
+        });
+        // update this.workshops
+        this.workshops = this.workshops.filter((w) => w.id !== workshop.id);
+        this.filterWorkshops();
+      },
+      error: () => {
+        this.toastService.add({
+          message: `Could not delete workshop with id = ${workshop.id}`,
+          className: 'bg-danger text-light',
+          duration: 5000,
+        });
       },
     });
   }

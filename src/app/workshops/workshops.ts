@@ -27,4 +27,8 @@ export class WorkshopsService {
   getWorkshopById(workshopId: number) {
     return this.http.get<IWorkshop>(`${this.apiUrl}/workshops/${workshopId}`);
   }
+
+  deleteWorkshopById(workshopId: number) {
+    return this.http.delete<void>(`${this.apiUrl}/workshops/${workshopId}`);
+  }
 }
