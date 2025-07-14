@@ -4,6 +4,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
 import { SessionsService } from '../../sessions';
 import ISession from '../../models/ISession';
+import { ToastService } from '../../../common/toast';
 
 @Component({
   selector: 'app-add-session',
@@ -15,7 +16,8 @@ export class AddSession {
   constructor(
     private activatedRoute: ActivatedRoute,
     private sessionsService: SessionsService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   addSession(addSessionForm: NgForm) {
@@ -35,10 +37,21 @@ export class AddSession {
 
     this.sessionsService.addSession(newSession).subscribe({
       next: (addedSession) => {
-        alert(`Added session with id = ${addedSession.id}`);
+        this.toastService.add({
+          message: `Added session with id = ${addedSession.id}`,
+          className: 'bg-success text-light',
+          duration: 5000,
+        });
 
         // You can also use navigateByUrl()
         this.router.navigate(['/workshops', id]);
+      },
+      error: (error) => {
+        this.toastService.add({
+          message: `Unable to add the session - ${error.message}`,
+          className: 'bg-danger text-light',
+          duration: 5000,
+        });
       },
     });
   }
