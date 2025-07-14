@@ -25,4 +25,12 @@ export class SessionsService {
       null
     );
   }
+
+  addSession(session: Omit<ISession, 'id'>) {
+    return this.http.post<ISession>(`${this.apiUrl}/sessions`, session, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
 }

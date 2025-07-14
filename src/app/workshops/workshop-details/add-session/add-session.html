@@ -7,7 +7,15 @@
 
 <hr />
 
-<form id="add-session-form">
+<form
+  id="add-session-form"
+  #addSessionForm="ngForm"
+  (ngSubmit)="addSession(addSessionForm)"
+>
+  <div>valid = {{ addSessionForm.valid | json }}</div>
+  <div>invalid = {{ addSessionForm.invalid | json }}</div>
+  <div>value = {{ addSessionForm.value | json }}</div>
+  <div>dirty = {{ addSessionForm.dirty | json }}</div>
   <div class="mb-3">
     <label for="sequenceId" class="form-label">Sequence ID</label>
     <input
@@ -38,6 +46,7 @@
       type="text"
       class="form-control"
       id="name"
+      name="name"
       required
       pattern="[A-Z][A-Za-z ]+"
       ngModel
@@ -59,6 +68,7 @@
       type="text"
       class="form-control"
       id="speaker"
+      name="speaker"
       required
       pattern="[A-Z][A-Za-z ]+(,[A-Z ][A-Za-z ]+)*"
       ngModel
@@ -84,6 +94,7 @@
       type="number"
       class="form-control"
       id="duration"
+      name="duration"
       required
       min="0.5"
       max="10"
@@ -105,7 +116,14 @@
   </div>
   <div class="mb-3">
     <label for="level" class="form-label">Level</label>
-    <select class="form-select" id="level" required ngModel #level="ngModel">
+    <select
+      class="form-select"
+      id="level"
+      name="level"
+      required
+      ngModel
+      #level="ngModel"
+    >
       <option value="Basic">Basic</option>
       <option value="Intermediate">Intermediate</option>
       <option value="Advanced">Advanced</option>
@@ -123,6 +141,7 @@
     <textarea
       class="form-control"
       id="abstract"
+      name="abstract"
       rows="3"
       required
       minlength="20"
@@ -141,6 +160,8 @@
     }
   </div>
   <div class="mb-3">
-    <button class="btn btn-primary">Add session</button>
+    <button class="btn btn-primary" [disabled]="addSessionForm.invalid">
+      Add session
+    </button>
   </div>
 </form>
