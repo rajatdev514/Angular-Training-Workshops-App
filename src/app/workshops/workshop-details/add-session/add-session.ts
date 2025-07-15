@@ -6,6 +6,7 @@ import {
   FormGroup,
   FormControl,
   Validators,
+  FormBuilder,
 } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
 import { SessionsService } from '../../sessions';
@@ -20,35 +21,7 @@ import { ToastService } from '../../../common/toast';
   styleUrls: ['./add-session.scss'],
 })
 export class AddSession {
-  addSessionForm = new FormGroup({
-    sequenceId: new FormControl(
-      '', // initial value of the input
-      [
-        // the list of validators
-        Validators.required,
-        Validators.pattern('\\d+'),
-      ]
-    ),
-    name: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[A-Z][A-Za-z ]+'),
-    ]),
-    speaker: new FormControl('', [
-      Validators.required,
-      Validators.pattern('[A-Z][A-Za-z ]+(,[A-Z ][A-Za-z ]+)*'),
-    ]),
-    duration: new FormControl('', [
-      Validators.required,
-      Validators.min(0.5),
-      Validators.max(10),
-    ]),
-    level: new FormControl('', [Validators.required]),
-    abstract: new FormControl('', [
-      Validators.required,
-      Validators.minLength(20),
-    ]),
-  });
-
+  addSessionForm!: FormGroup;
   // helper accessor methods
   get sequenceId() {
     return this.addSessionForm.get('sequenceId') as FormControl;
@@ -78,8 +51,38 @@ export class AddSession {
     private activatedRoute: ActivatedRoute,
     private sessionsService: SessionsService,
     private router: Router,
-    private toastService: ToastService
-  ) {}
+    private toastService: ToastService,
+    private fb: FormBuilder
+  ) {
+    this.addSessionForm = this.fb.group({
+      sequenceId: new FormControl(
+        '', // initial value of the input
+        [
+          // the list of validators
+          Validators.required,
+          Validators.pattern('\\d+'),
+        ]
+      ),
+      name: new FormControl('', [
+        Validators.required,
+        Validators.pattern('[A-Z][A-Za-z ]+'),
+      ]),
+      speaker: new FormControl('', [
+        Validators.required,
+        Validators.pattern('[A-Z][A-Za-z ]+(,[A-Z ][A-Za-z ]+)*'),
+      ]),
+      duration: new FormControl('', [
+        Validators.required,
+        Validators.min(0.5),
+        Validators.max(10),
+      ]),
+      level: new FormControl('', [Validators.required]),
+      abstract: new FormControl('', [
+        Validators.required,
+        Validators.minLength(20),
+      ]),
+    });
+  }
 
   addSession() {
     const addSessionForm = this.addSessionForm;
