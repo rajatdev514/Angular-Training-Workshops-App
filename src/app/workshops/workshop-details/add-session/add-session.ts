@@ -7,11 +7,54 @@ import {
   FormControl,
   Validators,
   FormBuilder,
+  AbstractControl,
 } from '@angular/forms';
 import { JsonPipe } from '@angular/common';
 import { SessionsService } from '../../sessions';
 import ISession from '../../models/ISession';
 import { ToastService } from '../../../common/toast';
+
+function durationAndLevel(form: AbstractControl) {
+  const durationStr = (form.get('duration') as AbstractControl).value;
+  const duration = +durationStr;
+  const level = (form.get('level') as AbstractControl).value;
+
+  // if valid -> return null
+  // if invalid -> return an object with the details of the error. Further this object should have the property called `durationAndLevel`
+  if (durationStr === '' || level === '') {
+    return null;
+  }
+
+  if (level === 'Basic') {
+    return null;
+  }
+
+  if (level === 'Intermediate') {
+    if (duration >= 2) {
+      return null;
+    }
+
+    // error
+    return {
+      durationAndLevel:
+        'Intermediate level session should be at least 2 hours in duration',
+    };
+  }
+
+  if (level === 'Advanced') {
+    if (duration >= 3) {
+      return null;
+    }
+
+    // error
+    return {
+      durationAndLevel:
+        'Advanced level session should be at least 3 hours in duration',
+    };
+  }
+
+  return null;
+}
 
 @Component({
   selector: 'app-add-session',
@@ -54,34 +97,39 @@ export class AddSession {
     private toastService: ToastService,
     private fb: FormBuilder
   ) {
-    this.addSessionForm = this.fb.group({
-      sequenceId: new FormControl(
-        '', // initial value of the input
-        [
-          // the list of validators
+    this.addSessionForm = this.fb.group(
+      {
+        sequenceId: new FormControl(
+          '', // initial value of the input
+          [
+            // the list of validators
+            Validators.required,
+            Validators.pattern('\\d+'),
+          ]
+        ),
+        name: new FormControl('', [
           Validators.required,
-          Validators.pattern('\\d+'),
-        ]
-      ),
-      name: new FormControl('', [
-        Validators.required,
-        Validators.pattern('[A-Z][A-Za-z ]+'),
-      ]),
-      speaker: new FormControl('', [
-        Validators.required,
-        Validators.pattern('[A-Z][A-Za-z ]+(,[A-Z ][A-Za-z ]+)*'),
-      ]),
-      duration: new FormControl('', [
-        Validators.required,
-        Validators.min(0.5),
-        Validators.max(10),
-      ]),
-      level: new FormControl('', [Validators.required]),
-      abstract: new FormControl('', [
-        Validators.required,
-        Validators.minLength(20),
-      ]),
-    });
+          Validators.pattern('[A-Z][A-Za-z ]+'),
+        ]),
+        speaker: new FormControl('', [
+          Validators.required,
+          Validators.pattern('[A-Z][A-Za-z ]+(,[A-Z ][A-Za-z ]+)*'),
+        ]),
+        duration: new FormControl('', [
+          Validators.required,
+          Validators.min(0.5),
+          Validators.max(10),
+        ]),
+        level: new FormControl('', [Validators.required]),
+        abstract: new FormControl('', [
+          Validators.required,
+          Validators.minLength(20),
+        ]),
+      },
+      {
+        validators: durationAndLevel,
+      }
+    );
   }
 
   addSession() {
