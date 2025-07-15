@@ -9,9 +9,13 @@
 
 <form
   id="add-session-form"
-  (ngSubmit)="addSession()"
-  [formGroup]="addSessionForm"
+  #addSessionForm="ngForm"
+  (ngSubmit)="addSession(addSessionForm)"
 >
+  <!-- <div>valid = {{ addSessionForm.valid | json }}</div>
+  <div>invalid = {{ addSessionForm.invalid | json }}</div>
+  <div>value = {{ addSessionForm.value | json }}</div>
+  <div>dirty = {{ addSessionForm.dirty | json }}</div> -->
   <div class="mb-3">
     <label for="sequenceId" class="form-label">Sequence ID</label>
     <input
@@ -19,7 +23,11 @@
       class="form-control"
       id="sequenceId"
       name="sequenceId"
-      formControlName="sequenceId"
+      required
+      pattern="\d+"
+      ngModel
+      #sequenceId="ngModel"
+      autocomplete="off"
     />
     @if( sequenceId.invalid && ( sequenceId.touched || sequenceId.dirty ) &&
     sequenceId.errors ) {
@@ -39,7 +47,10 @@
       class="form-control"
       id="name"
       name="name"
-      formControlName="name"
+      required
+      pattern="[A-Z][A-Za-z ]+"
+      ngModel
+      #name="ngModel"
     />
     @if( name.invalid && ( name.touched || name.dirty ) && name.errors ) {
     <div class="error-message">
@@ -58,7 +69,10 @@
       class="form-control"
       id="speaker"
       name="speaker"
-      formControlName="speaker"
+      required
+      pattern="[A-Z][A-Za-z ]+(,[A-Z ][A-Za-z ]+)*"
+      ngModel
+      #speaker="ngModel"
     />
     @if( speaker.invalid && ( speaker.touched || speaker.dirty ) &&
     speaker.errors ) {
@@ -81,7 +95,11 @@
       class="form-control"
       id="duration"
       name="duration"
-      formControlName="duration"
+      required
+      min="0.5"
+      max="10"
+      ngModel
+      #duration="ngModel"
     />
     @if( duration.invalid && ( duration.touched || duration.dirty ) &&
     duration.errors ) {
@@ -98,7 +116,14 @@
   </div>
   <div class="mb-3">
     <label for="level" class="form-label">Level</label>
-    <select class="form-select" id="level" name="level" formControlName="level">
+    <select
+      class="form-select"
+      id="level"
+      name="level"
+      required
+      ngModel
+      #level="ngModel"
+    >
       <option value="Basic">Basic</option>
       <option value="Intermediate">Intermediate</option>
       <option value="Advanced">Advanced</option>
@@ -118,7 +143,10 @@
       id="abstract"
       name="abstract"
       rows="3"
-      formControlName="abstract"
+      required
+      minlength="20"
+      ngModel
+      #abstract="ngModel"
     ></textarea>
     @if( abstract.invalid && ( abstract.touched || abstract.dirty ) &&
     abstract.errors ) {
